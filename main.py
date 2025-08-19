@@ -19,10 +19,22 @@ def read_file(filename):
 
 # Example usage
 if __name__ == "__main__":
-    # Test valid program
-    print("Testing valid program:")
-    valid_program = read_file('valid_program.c')
-    is_valid = validate_c_program(valid_program)
+    # Test original valid program
+    print("Testing original valid program:")
+    original_valid_program = read_file('valid_program.c')
+    is_valid = validate_c_program(original_valid_program)
+    print(f"Program is {'valid' if is_valid else 'invalid'}\n")
+    
+    # Test simple float program
+    print("Testing simple float program:")
+    simple_float_program = read_file('test_float_program.c')
+    is_valid = validate_c_program(simple_float_program)
+    print(f"Program is {'valid' if is_valid else 'invalid'}\n")
+    
+    # Test complex float program
+    print("Testing complex float program:")
+    complex_float_program = read_file('complex_float_program.c')
+    is_valid = validate_c_program(complex_float_program)
     print(f"Program is {'valid' if is_valid else 'invalid'}\n")
     
     # Test invalid program

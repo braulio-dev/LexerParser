@@ -37,10 +37,28 @@ class Lexer:
 
     def number(self):
         result = ''
+        is_float = False
+        
+        # Collect digits before decimal point
         while self.current_char is not None and self.current_char.isdigit():
             result += self.current_char
             self.advance()
-        return ('NUMBER', int(result))
+        
+        # Check for decimal point
+        if self.current_char == '.':
+            is_float = True
+            result += self.current_char
+            self.advance()
+            
+            # Collect digits after decimal point
+            while self.current_char is not None and self.current_char.isdigit():
+                result += self.current_char
+                self.advance()
+        
+        if is_float:
+            return ('FLOAT', float(result))
+        else:
+            return ('NUMBER', int(result))
 
     def identifier(self):
         result = ''

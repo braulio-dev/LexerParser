@@ -133,8 +133,12 @@ class Parser:
     def condition(self):
         if self.current_token[0] == 'IDENTIFIER':
             self.eat('IDENTIFIER')
-        else:
+        elif self.current_token[0] == 'NUMBER':
             self.eat('NUMBER')
+        elif self.current_token[0] == 'FLOAT':
+            self.eat('FLOAT')
+        else:
+            raise Exception(f'Expected identifier or number, got {self.current_token[0]} at token index {self.current_token_index}: {self.current_token}')
         
         if self.current_token[0] in ['EQUALS', 'NOT_EQUALS', 'LESS', 'GREATER', 'LESS_EQUALS', 'GREATER_EQUALS']:
             self.eat(self.current_token[0])
@@ -143,21 +147,40 @@ class Parser:
 
         if self.current_token[0] == 'IDENTIFIER':
             self.eat('IDENTIFIER')
-        else:
+        elif self.current_token[0] == 'NUMBER':
             self.eat('NUMBER')
+        elif self.current_token[0] == 'FLOAT':
+            self.eat('FLOAT')
+        else:
+            raise Exception(f'Expected identifier or number, got {self.current_token[0]} at token index {self.current_token_index}: {self.current_token}')
 
     def expression(self):
+        # Parse the first term
+        self.term()
+        
+        # Continue parsing additional terms with + or - operators
+        while self.current_token[0] in ['PLUS', 'MINUS']:
+            self.eat(self.current_token[0])
+            self.term()
+
+    def term(self):
+        # Parse the first factor
+        self.factor()
+        
+        # Continue parsing additional factors with * or / operators
+        while self.current_token[0] in ['MULTIPLY', 'DIVIDE']:
+            self.eat(self.current_token[0])
+            self.factor()
+
+    def factor(self):
         if self.current_token[0] == 'IDENTIFIER':
             self.eat('IDENTIFIER')
-        else:
+        elif self.current_token[0] == 'NUMBER':
             self.eat('NUMBER')
-
-        if self.current_token[0] in ['PLUS', 'MINUS', 'MULTIPLY', 'DIVIDE']:
-            self.eat(self.current_token[0])
-            if self.current_token[0] == 'IDENTIFIER':
-                self.eat('IDENTIFIER')
-            else:
-                self.eat('NUMBER')
+        elif self.current_token[0] == 'FLOAT':
+            self.eat('FLOAT')
+        else:
+            raise Exception(f'Expected identifier or number, got {self.current_token[0]} at token index {self.current_token_index}: {self.current_token}')
 
     def format_token_layout(self):
         indent = 0
